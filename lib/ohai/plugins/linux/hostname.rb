@@ -23,4 +23,9 @@ begin
   fqdn from("hostname --fqdn")
 rescue
   Ohai::Log.debug("hostname -f returned an error, probably no domain is set")
+  begin
+    fqdn from('curl -s -w "\n" http://169.254.169.254/latest/meta-data/local-hostname')
+  rescue
+    Ohai::Log.debug('curl -s -w "\n" http://169.254.169.254/latest/meta-data/local-hostname returned an error, probably no domain is set')
+  end
 end
